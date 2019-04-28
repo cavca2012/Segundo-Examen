@@ -15,8 +15,10 @@ import java.net.Socket;
  * @author cavca
  */
 class ServidorF implements Runnable {
+    
+    int puerto;
 
-    @Override
+//    @Override
     public void run() {
         System.out.println("ServidorF");
 
