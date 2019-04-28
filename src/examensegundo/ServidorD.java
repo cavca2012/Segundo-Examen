@@ -87,27 +87,34 @@ class ServidorD implements Runnable {
                         int puertoServidor2 = puerto2;
                         DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, puertoServidor2);
                         socketUDP2.send(peticion2);
+                        bufer = new byte[1000];
                         DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
                         socketUDP2.receive(respuesta2);
-                        System.out.println("Respuesta: " + new String(respuesta2.getData()));
+                        String r = new String(respuesta2.getData());
+                        System.out.println("Respuesta: " + r);
+                        System.out.println("Enviar a "+peticion.getPort());
+                        DatagramPacket respuesta3 = new DatagramPacket(r.getBytes(), r.length(), peticion.getAddress(), peticion.getPort());
+                        socketUDP2.send(respuesta3);
+                        Thread.sleep(100);
                         socketUDP2.close();
                     } else {
                         DatagramSocket socketUDP2 = new DatagramSocket();
                         InetAddress hostServidor2 = InetAddress.getByName("localhost");
 //                        int puertoServidor2 = puerto - 1;
 //                        mensaje = InetAddress.getLocalHost().getHostAddress();
-                        mensaje = new String();
-                        mensaje = (puerto+100)+"";
+//                        mensaje = new String();
+                        mensaje = new String((puerto+100)+"");
                         System.out.println("Enviar a "+peticion.getPort());
                         System.out.println(mensaje);
                         DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, peticion.getPort());
-                        Thread.sleep(500);
+//                        Thread.sleep(1000);
                         socketUDP2.send(peticion2);
                         ServidorF sf = new ServidorF(puerto+100,enviar);
+                        sf.run();
 //                        DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
 //                        socketUDP2.receive(respuesta2);
 //                        System.out.println("Respuesta: " + new String(respuesta2.getData()));
-//                        socketUDP2.close();
+                        socketUDP2.close();
                     }
                     System.out.println("");
                 }

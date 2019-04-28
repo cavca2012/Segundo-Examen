@@ -6,8 +6,12 @@
 package examensegundo;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -16,24 +20,50 @@ import java.net.Socket;
  */
 class ClienteF implements Runnable {
 
-    @Override
+    int puerto;
+    int miPuerto;
+
+//    @Override
+    public ClienteF(int myPuerto,int puerto) {
+    miPuerto = myPuerto;
+        this.puerto = puerto;
+    }
+
     public void run() {
         System.out.println("ClienteF");
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-        Socket socket;
-        String mensaje = "1484-5482-2-PB.pdf";
+        Socket socket = null;
+        InputStream in = null;
+        OutputStream out = null;
 
         try {
-            socket = new Socket("127.0.0.1", 9100);
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            socket = new Socket("localhost", puerto);
 
-            do {
-                //mensaje = in.readLine();
-                out.writeUTF(mensaje);
-            } while (!mensaje.startsWith("fin"));
+            in = socket.getInputStream();
+            
+            DataOutputStream out2 = new DataOutputStream(socket.getOutputStream());
+            DataInputStream in2 = new DataInputStream(socket.getInputStream());
+            
+            out2.writeUTF("Empieza");
+            String nombre = in2.readUTF();
+
+            System.out.println("\n.\\src\\CarpetasDeServidores\\"+miPuerto+"\\"+nombre);
+            out = new FileOutputStream(".\\src\\CarpetasDeServidores\\"+miPuerto+"\\"+nombre);
+            byte[] bytes = new byte[16 * 1024];
+
+            int count;
+            while ((count = in2.read(bytes)) > 0) {
+                out.write(bytes, 0, count);
+            }
+
+            out.close();
+            in.close();
+            out2.close();
+            in2.close();
+            socket.close();
+
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
     }

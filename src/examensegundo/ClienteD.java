@@ -19,10 +19,11 @@ class ClienteD {
 
     byte[] mensaje;
     int puertoServidor = 9000;
+    int miPuerto;
 //    int miPuerto = 9000;
             
     ClienteD(int puerto) {
-        puertoServidor = puerto;
+        miPuerto = puerto;
     }
 
     public int getPuertoServidor() {
@@ -57,13 +58,16 @@ class ClienteD {
             socketUDP.send(peticion);
 
             // Construimos el DatagramPacket que contendrá la respuesta
-            byte[] bufer = new byte[1000];
+            byte[] bufer = new byte[4];
             DatagramPacket respuesta = new DatagramPacket(bufer, bufer.length);
             System.out.println("Esperando Archivo");
             socketUDP.receive(respuesta);
+            String puerto = new String(respuesta.getData());
             // Enviamos la respuesta del servidor a la salida estandar
-            System.out.println("Respuesta: " + new String(respuesta.getData()));
-
+            System.out.println("Respuesta: " + puerto);
+            
+            ClienteF cf = new ClienteF(miPuerto,Integer.parseInt(puerto));
+            cf.run();
             // Cerramos el socket
             socketUDP.close();
 
