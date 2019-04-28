@@ -92,8 +92,8 @@ public class ExamenSegundo extends JFrame implements ActionListener{
     static ClienteM clienteM;
     static ServidorD servidorD;
     static ClienteD clienteD;
-    static ServidorF servidorF = new ServidorF();
-    static ClienteF clienteF = new ClienteF();
+//    static ServidorF servidorF = new ServidorF();
+//    static ClienteF clienteF = new ClienteF();
     
     public static void main(String[] args) {
         ExamenSegundo es = new ExamenSegundo();

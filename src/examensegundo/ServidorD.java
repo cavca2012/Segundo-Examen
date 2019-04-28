@@ -59,6 +59,7 @@ class ServidorD implements Runnable {
                 String url = ".\\src\\CarpetasDeServidores\\" + puerto;
 
                 File carpeta = new File(url);
+                File enviar = null;
 
                 if (carpeta.isDirectory()) {
                     File lista[] = carpeta.listFiles();
@@ -70,6 +71,9 @@ class ServidorD implements Runnable {
                         try {
                             if (!mensaje.substring(0, (int) lista1.getName().length()).equals(lista1.getName())) {
                                 cont++;
+                            }
+                            else{
+                                enviar = lista1;
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -99,7 +103,7 @@ class ServidorD implements Runnable {
                         DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, peticion.getPort());
                         Thread.sleep(500);
                         socketUDP2.send(peticion2);
-                        ServidorF sf = new ServidorF();
+                        ServidorF sf = new ServidorF(puerto+100,enviar);
 //                        DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
 //                        socketUDP2.receive(respuesta2);
 //                        System.out.println("Respuesta: " + new String(respuesta2.getData()));

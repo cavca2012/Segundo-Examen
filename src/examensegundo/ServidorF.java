@@ -14,15 +14,20 @@ import java.net.Socket;
  *
  * @author cavca
  */
-class ServidorF implements Runnable {
+class ServidorF{
     
     int puerto;
+    File archivo;
+
+    ServidorF(int i, File enviar) {
+        puerto = i;
+        archivo = enviar;
+    }
 
 //    @Override
     public void run() {
         System.out.println("ServidorF");
 
-        int puerto = 9100;
         try {
             ServerSocket socket = new ServerSocket(puerto);
             Socket socket_cli = socket.accept();
