@@ -10,6 +10,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -38,8 +40,10 @@ class ClienteD {
         return mensaje;
     }
 
-    public void setMensaje(byte[] mensaje) {
-        this.mensaje = mensaje;
+    public void setMensaje(byte[] mensaj) {
+        String men = new String(mensaj);
+        men = miPuerto+":"+men;
+        mensaje = men.getBytes();
         run();
     }
     
@@ -66,8 +70,14 @@ class ClienteD {
             // Enviamos la respuesta del servidor a la salida estandar
             System.out.println("Respuesta: " + puerto);
             
+            try{
             ClienteF cf = new ClienteF(miPuerto,Integer.parseInt(puerto));
             cf.run();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Archivo no encontrado", "File not Found", JOptionPane.ERROR_MESSAGE, null);
+            }
+            
             // Cerramos el socket
             socketUDP.close();
 

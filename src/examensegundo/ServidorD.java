@@ -35,7 +35,6 @@ class ServidorD implements Runnable {
         this.puerto2 = puerto2;
     }
 
-    
     @Override
     public void run() {
         System.out.println("ServidorD");
@@ -50,82 +49,101 @@ class ServidorD implements Runnable {
                 // Leemos una petición del DatagramSocket
                 socketUDP.receive(peticion);
 
-                String mensaje = new String(peticion.getData());
+                String puertoYmensaje = new String(peticion.getData());
+                int puetoOrigen = Integer.parseInt(puertoYmensaje.split(":")[0]);
 
-                System.out.print("Datagrama recibido del host: " + peticion.getAddress());
-                System.out.println(" desde el puerto remoto: " + peticion.getPort());
-                System.out.println(mensaje);
+                String mensaje;
 
-                String url = ".\\src\\CarpetasDeServidores\\" + puerto;
-
-                File carpeta = new File(url);
-                File enviar = null;
-
-                if (carpeta.isDirectory()) {
-                    File lista[] = carpeta.listFiles();
-
-                    System.out.println("");
-                    int cont = 0;
-                    for (File lista1 : lista) {
-//                    System.out.println(mensaje.length() +" "+ lista1.getName().length());
-                        try {
-                            if (!mensaje.substring(0, (int) lista1.getName().length()).equals(lista1.getName())) {
-                                cont++;
-                            }
-                            else{
-                                enviar = lista1;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    if (cont == lista.length) {
-                        DatagramSocket socketUDP2 = new DatagramSocket();
-                        InetAddress hostServidor2 = InetAddress.getByName("localhost");
-                        System.out.println("Enviar a "+puerto2);
-                        int puertoServidor2 = puerto2;
-                        DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, puertoServidor2);
-                        socketUDP2.send(peticion2);
-                        bufer = new byte[1000];
-                        DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
-                        socketUDP2.receive(respuesta2);
-                        String r = new String(respuesta2.getData());
-                        System.out.println("Respuesta: " + r);
-                        System.out.println("Enviar a "+peticion.getPort());
-                        DatagramPacket respuesta3 = new DatagramPacket(r.getBytes(), r.length(), peticion.getAddress(), peticion.getPort());
-                        socketUDP2.send(respuesta3);
-                        Thread.sleep(100);
-                        socketUDP2.close();
-                    } else {
-                        DatagramSocket socketUDP2 = new DatagramSocket();
-                        InetAddress hostServidor2 = InetAddress.getByName("localhost");
+                if (puetoOrigen == puerto) {
+                    DatagramSocket socketUDP2 = new DatagramSocket();
+                    InetAddress hostServidor2 = InetAddress.getByName("localhost");
 //                        int puertoServidor2 = puerto - 1;
 //                        mensaje = InetAddress.getLocalHost().getHostAddress();
 //                        mensaje = new String();
-                        mensaje = new String((puerto+100)+"");
-                        System.out.println("Enviar a "+peticion.getPort());
-                        System.out.println(mensaje);
-                        DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, peticion.getPort());
+                    mensaje = "No F";
+                    System.out.println("Enviar a " + peticion.getPort());
+                    System.out.println(mensaje);
+                    DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, peticion.getPort());
 //                        Thread.sleep(1000);
-                        socketUDP2.send(peticion2);
-                        ServidorF sf = new ServidorF(puerto+100,enviar);
-                        sf.run();
+                    socketUDP2.send(peticion2);
+                } else {
+
+                    mensaje = puertoYmensaje.split(":")[1];
+
+                    System.out.print("Datagrama recibido del host: " + peticion.getAddress());
+                    System.out.println(" desde el puerto remoto: " + peticion.getPort());
+                    System.out.println(mensaje);
+
+                    String url = ".\\src\\CarpetasDeServidores\\" + puerto;
+
+                    File carpeta = new File(url);
+                    File enviar = null;
+
+                    if (carpeta.isDirectory()) {
+                        File lista[] = carpeta.listFiles();
+
+                        System.out.println("");
+                        int cont = 0;
+                        for (File lista1 : lista) {
+//                    System.out.println(mensaje.length() +" "+ lista1.getName().length());
+                            try {
+                                if (!mensaje.substring(0, (int) lista1.getName().length()).equals(lista1.getName())) {
+                                    cont++;
+                                } else {
+                                    enviar = lista1;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (cont == lista.length) {
+                            DatagramSocket socketUDP2 = new DatagramSocket();
+                            InetAddress hostServidor2 = InetAddress.getByName("localhost");
+                            System.out.println("Enviar a " + puerto2);
+                            int puertoServidor2 = puerto2;
+                            DatagramPacket peticion2 = new DatagramPacket(puertoYmensaje.getBytes(), puertoYmensaje.length(), hostServidor2, puertoServidor2);
+                            socketUDP2.send(peticion2);
+                            bufer = new byte[1000];
+                            DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
+                            socketUDP2.receive(respuesta2);
+                            String r = new String(respuesta2.getData());
+                            System.out.println("Respuesta: " + r);
+                            System.out.println("Enviar a " + peticion.getPort());
+                            DatagramPacket respuesta3 = new DatagramPacket(r.getBytes(), r.length(), peticion.getAddress(), peticion.getPort());
+                            socketUDP2.send(respuesta3);
+                            Thread.sleep(100);
+                            socketUDP2.close();
+                        } else {
+                            DatagramSocket socketUDP2 = new DatagramSocket();
+                            InetAddress hostServidor2 = InetAddress.getByName("localhost");
+//                        int puertoServidor2 = puerto - 1;
+//                        mensaje = InetAddress.getLocalHost().getHostAddress();
+//                        mensaje = new String();
+                            mensaje = new String((puerto + 100) + "");
+                            System.out.println("Enviar a " + peticion.getPort());
+                            System.out.println(mensaje);
+                            DatagramPacket peticion2 = new DatagramPacket(mensaje.getBytes(), mensaje.length(), hostServidor2, peticion.getPort());
+//                        Thread.sleep(1000);
+                            socketUDP2.send(peticion2);
+                            ServidorF sf = new ServidorF(puerto + 100, enviar);
+                            sf.run();
 //                        DatagramPacket respuesta2 = new DatagramPacket(bufer, bufer.length);
 //                        socketUDP2.receive(respuesta2);
 //                        System.out.println("Respuesta: " + new String(respuesta2.getData()));
-                        socketUDP2.close();
+                            socketUDP2.close();
+                        }
+                        System.out.println("");
                     }
-                    System.out.println("");
-                }
 
-                // Construimos el DatagramPacket para enviar la respuesta
+                    // Construimos el DatagramPacket para enviar la respuesta
 //                DatagramPacket respuesta = new DatagramPacket(peticion.getData(), peticion.getLength(), peticion.getAddress(), peticion.getPort());
 //
 //                // Enviamos la respuesta, que es un eco
 //                socketUDP.send(respuesta);
-                Thread.sleep(100);
-                socketUDP.close();
+                    Thread.sleep(100);
+                    socketUDP.close();
+                }
             }
 
         } catch (SocketException e) {
