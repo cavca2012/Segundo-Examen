@@ -61,6 +61,8 @@ public class ExamenSegundo extends JFrame implements ActionListener {
     static DefaultTableModel modelo1 = new DefaultTableModel();
     static JTable tab2 = new JTable();
     static DefaultTableModel modelo2 = new DefaultTableModel();
+    static JTable tab3 = new JTable();
+    static DefaultTableModel modelo3 = new DefaultTableModel();
     JLabel lab2 = new JLabel("<html><p align=center>Nombre del archivo a buscar</p></html>");
     JTextField tf1 = new JTextField();
     static JLabel lab3 = new JLabel("<html><h1>Puerto : </H1></html>");
@@ -71,23 +73,27 @@ public class ExamenSegundo extends JFrame implements ActionListener {
 
     public ExamenSegundo() {
         setTitle("Examen 2do parcial");
-        setSize(800, 500);
+        setSize(900, 500);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         String columnI[] = {"Ip de Servidor", "Puerto"};
         String columnA[] = {"Archivos buscados"};
+        String columnA2[] = {"Respuestas"};
         modelo1.setColumnIdentifiers(columnI);
         tab1.setModel(modelo1);
         modelo2.setColumnIdentifiers(columnA);
         tab2.setModel(modelo2);
+        modelo3.setColumnIdentifiers(columnA2);
+        tab3.setModel(modelo3);
 
         DefaultTableCellRenderer Alinear = new DefaultTableCellRenderer();
         Alinear.setHorizontalAlignment(SwingConstants.CENTER);
         tab1.getColumnModel().getColumn(0).setCellRenderer(Alinear);
         tab1.getColumnModel().getColumn(1).setCellRenderer(Alinear);
         tab2.getColumnModel().getColumn(0).setCellRenderer(Alinear);
+        tab3.getColumnModel().getColumn(0).setCellRenderer(Alinear);
 //        tab1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 //        tab1.setAutoCreateRowSorter(true);
@@ -98,11 +104,13 @@ public class ExamenSegundo extends JFrame implements ActionListener {
 
         JScrollPane sp1 = new JScrollPane(tab1);
         JScrollPane sp2 = new JScrollPane(tab2);
+        JScrollPane sp3 = new JScrollPane(tab3);
 
         bot1.setSize(150, 70);
         lab1.setSize(200, 50);
         sp1.setSize(200, 250);
         sp2.setSize(200, 400);
+        sp3.setSize(100, 400);
         lab2.setSize(250, 50);
         tf1.setSize(300, 50);
         lab3.setSize(200, 50);
@@ -118,6 +126,7 @@ public class ExamenSegundo extends JFrame implements ActionListener {
         lab3.setLocation(200, 10);
         sp1.setLocation(25, 160);
         sp2.setLocation(570, 20);
+        sp3.setLocation(770, 20);
         lab4.setLocation(175, 50);
         lab5.setLocation(325, 50);
         lab6.setLocation(185, 70);
@@ -128,6 +137,7 @@ public class ExamenSegundo extends JFrame implements ActionListener {
         add(lab2);
         add(sp1);
         add(sp2);
+        add(sp3);
         add(tf1);
         add(lab3);
         add(lab4);
@@ -208,6 +218,12 @@ public class ExamenSegundo extends JFrame implements ActionListener {
                     modelo2.addRow(fila);
                 }
                 servidorD.aBuscados.clear();
+                
+                for(int i=0;i<servidorD.aRespuestas.size();i++){
+                    fila[0]=servidorD.aRespuestas.get(i);
+                    modelo3.addRow(fila);
+                }
+                servidorD.aRespuestas.clear();
 
 //                System.out.println("bla");
                 servidorM.servidores.clear();
@@ -228,6 +244,8 @@ public class ExamenSegundo extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
+            servidorD.aBuscados.add(tf1.getText());
+            servidorD.aRespuestas.add("Yo lo pedi");
             clienteD.setMensaje(tf1.getText().getBytes());
 //            Thread cd = new Thread(clienteD);
 //            cd.start();
