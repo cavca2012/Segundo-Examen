@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 class ServidorM implements Runnable {
     
     ArrayList<String> servidores = new ArrayList<String>();
+    ArrayList<String> servidoresIp = new ArrayList<String>();
 
     @Override
     public void run() {
@@ -38,6 +39,7 @@ class ServidorM implements Runnable {
                     
                     if(!servidores.contains(new String(dp.getData()))){
                         servidores.add(new String(dp.getData()));
+                        servidoresIp.add(dp.getAddress().toString());
                     }
                     
 //                    String port = new String(dp.getData());
@@ -57,5 +59,11 @@ class ServidorM implements Runnable {
         this.servidores = servidores;
     }
 
-    
+    public ArrayList<String> getServidoresIp() {
+        return servidoresIp;
+    }
+
+    public void setServidoresIp(ArrayList<String> servidoresIp) {
+        this.servidoresIp = servidoresIp;
+    }
 }

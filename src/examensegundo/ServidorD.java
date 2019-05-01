@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +23,8 @@ class ServidorD implements Runnable {
 
     int puerto;
     int puerto2;
+    String ipServidor = "localhost";
+    ArrayList<String> aBuscados = new ArrayList();
 
     public ServidorD(int puert) {
         puerto = puert;
@@ -33,6 +36,22 @@ class ServidorD implements Runnable {
 
     public void setPuerto2(int puerto2) {
         this.puerto2 = puerto2;
+    }
+
+    public String getIpServidor() {
+        return ipServidor;
+    }
+
+    public void setIpServidor(String ipServidor) {
+        this.ipServidor = ipServidor;
+    }
+
+    public ArrayList<String> getaBuscados() {
+        return aBuscados;
+    }
+
+    public void setaBuscados(ArrayList<String> aBuscados) {
+        this.aBuscados = aBuscados;
     }
 
     @Override
@@ -69,6 +88,7 @@ class ServidorD implements Runnable {
                 } else {
 
                     mensaje = puertoYmensaje.split(":")[1];
+                    aBuscados.add(mensaje);
 
                     System.out.print("Datagrama recibido del host: " + peticion.getAddress());
                     System.out.println(" desde el puerto remoto: " + peticion.getPort());

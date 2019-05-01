@@ -22,6 +22,7 @@ class ClienteD {
     byte[] mensaje;
     int puertoServidor = 9000;
     int miPuerto;
+    String ipServidor = "localhost";
 //    int miPuerto = 9000;
             
     ClienteD(int puerto) {
@@ -46,13 +47,21 @@ class ClienteD {
         mensaje = men.getBytes();
         run();
     }
+
+    public String getIpServidor() {
+        return ipServidor;
+    }
+
+    public void setIpServidor(String ipServidor) {
+        this.ipServidor = ipServidor;
+    }
     
     public void run() {
         System.out.println("ClienteD");
         try {
             DatagramSocket socketUDP = new DatagramSocket();
             //byte[] mensaje = "5401R022409165J1TWQC.pdf".getBytes();
-            InetAddress hostServidor = InetAddress.getByName("localhost");
+            InetAddress hostServidor = InetAddress.getByName(ipServidor);
 
             // Construimos un datagrama para enviar el mensaje al servidor
             DatagramPacket peticion = new DatagramPacket(mensaje, mensaje.length, hostServidor, puertoServidor);
